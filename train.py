@@ -7,7 +7,7 @@ from torch import nn
 import os
 
 if __name__ == '__main__':
-    dataset_path = "H:/My Drive/bioinfor_training/COAD_Aligned-20260309T160020Z-3-001/COAD_Aligned/dataset"
+    dataset_path = "/kaggle/input/datasets/nguyyentri/coad-aligned/COAD_Aligned/dataset"
 
     model = StratifiedKFoldCrossValidation(
         model_name="EfficientNetB1Classifier",
