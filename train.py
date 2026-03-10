@@ -24,7 +24,8 @@ if __name__ == '__main__':
         use_weighted_sampling= True,
         use_beta_calibration= True,
         calculate_cluster_metrics_flag=False,
-        random_seed=42
+        random_seed=42,
+        lambda1=0.1
     )
 
     # ── Unpack return (6 values) ──────────────────────────────────────────────
