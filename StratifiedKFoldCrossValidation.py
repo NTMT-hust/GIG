@@ -261,7 +261,7 @@ class StratifiedKFoldCrossValidation:
                 train_metrics = calculate_comprehensive_metrics(train_labels_epoch, train_preds, train_probs, num_classes, class_names)
                 # 2 Generate GradCAM from validation set
                 global_heatmap = generate_epoch_gradcam(
-                    model=model.module(),
+                    model=model.module,
                     dataloader=val_loader,
                     device=device,
                     epoch=epoch,
