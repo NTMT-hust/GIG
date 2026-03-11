@@ -193,7 +193,7 @@ class StratifiedKFoldCrossValidation:
                 model = EfficientNetB1Classifier(num_classes=num_classes, dropout_rate=self.dropout_rate).to(self.device)
             elif self.model_name == "Resnet50":
                 model = ResNetClassifier(num_classes=num_classes, dropout_rate=self.dropout_rate).to(self.device)
-
+            model = nn.DataParallel(model)
             model.to(self.device)
             class_weights = calculate_class_weights(train_labels, num_classes).to(self.device)
             criterion = FocalLoss(num_classes, alpha= class_weights, gamma=self.focal_gamma)
@@ -261,7 +261,7 @@ class StratifiedKFoldCrossValidation:
                 train_metrics = calculate_comprehensive_metrics(train_labels_epoch, train_preds, train_probs, num_classes, class_names)
                 # 2 Generate GradCAM from validation set
                 global_heatmap = generate_epoch_gradcam(
-                    model=model,
+                    model=model.module(),
                     dataloader=val_loader,
                     device=device,
                     epoch=epoch,
