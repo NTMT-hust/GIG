@@ -239,7 +239,7 @@ class StratifiedKFoldCrossValidation:
 
                 if epoch == self.freeze_epochs and self.freeze_epochs > 0:
                     print(' [Unfreezing backbone]')
-                    model.unfreeze_backbone()
+                    model.module.unfreeze_backbone()
                     optimizer = optim.AdamW(model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
                     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min',
                                                                     factor=0.5, patience=3)
@@ -629,7 +629,7 @@ def validate_epoch(model, dataloader, criterion, device, fold_idx):
     model.to(device)
     model.eval()
 
-    backbone = model.backbone
+    backbone = model.module.backbone
 
     if hasattr(backbone, "blocks"):
         target_block = backbone.blocks[-1]
@@ -685,7 +685,7 @@ def generate_fold_gradcam(model, dataloader, device, fold_idx, class_names, save
     
     # 1. Target the last convolutional layer
     # For timm EfficientNet, 'conv_head' is the final feature map layer
-    backbone = model.backbone
+    backbone = model.module.backbone
     if hasattr(backbone, "conv_head"):            # EfficientNet
         target_layer = backbone.conv_head
     elif hasattr(backbone, "blocks"):             # ConvNeXt / some timm models
@@ -785,7 +785,7 @@ def generate_epoch_gradcam(model, dataloader, device, epoch, class_names, output
     
     # 1. Target the last convolutional layer
     # For timm EfficientNet, 'conv_head' is the final feature map layer
-    backbone = model.backbone
+    backbone = model.module.backbone
     if hasattr(backbone, "conv_head"):            # EfficientNet
         target_layer = backbone.conv_head
     elif hasattr(backbone, "blocks"):             # ConvNeXt / some timm models
