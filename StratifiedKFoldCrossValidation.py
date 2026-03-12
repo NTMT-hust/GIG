@@ -779,7 +779,7 @@ def save_gradcam_image(img_path, heatmap, pred_class, true_class, output_dir, al
     cv2.imwrite(str(save_path), overlay)
     return heatmap_resized
 
-def generate_epoch_gradcam(model, dataloader, device, epoch, class_names, output_path, save_limit=2000000):
+def generate_epoch_gradcam(model, dataloader, device, epoch, class_names, output_path):
     model.to(device)
     model.eval()
     
@@ -805,7 +805,7 @@ def generate_epoch_gradcam(model, dataloader, device, epoch, class_names, output
     pos_heatmaps = []
     neg_heatmaps = []
     # Process samples
-    for i in range(min(len(dataloader.dataset), save_limit)):
+    for i in range(min(len(dataloader.dataset))):
         img_tensor, label = dataloader.dataset[i]
         img_path = dataloader.dataset.image_paths[i]
         
@@ -820,6 +820,8 @@ def generate_epoch_gradcam(model, dataloader, device, epoch, class_names, output
             pos_heatmaps.append((raw_heatmap, class_names[pred_idx]))
         else:
             neg_heatmaps.append((raw_heatmap, class_names[label]))
+        del heatmap, raw_heatmap, input_tensor
+        torch.cuda.empty_cache()
 
     # 3. CRITICAL: Remove hooks and free memory
     cam_extractor.remove_hooks()
