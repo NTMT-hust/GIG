@@ -805,7 +805,7 @@ def generate_epoch_gradcam(model, dataloader, device, epoch, class_names, output
     pos_heatmaps = []
     neg_heatmaps = []
     # Process samples
-    for i in range(min(len(dataloader.dataset))):
+    for i in range(len(dataloader.dataset)):
         img_tensor, label = dataloader.dataset[i]
         img_path = dataloader.dataset.image_paths[i]
         
